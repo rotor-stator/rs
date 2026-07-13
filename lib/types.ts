@@ -1,0 +1,31 @@
+export type ProductCategory = "stator" | "rotor";
+
+export interface Product {
+  id: string;
+  partNumber: string;
+  name: string;
+  description: string;
+  manufacturer: string;
+  model: string;
+  category: ProductCategory;
+  material?: string;
+  priceOnRequest: boolean;
+  imageUrl?: string;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface Manufacturer {
+  id: string;
+  name: string;
+  logoUrl?: string;
+}
+
+export interface ManufacturerModel {
+  id: string;
+  name: string;
+  manufacturerId: string;
+}

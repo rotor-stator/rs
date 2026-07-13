@@ -1,0 +1,82 @@
+{
+  "common": {
+    "search": "Buscar por número de pieza o código de bomba",
+    "searchButton": "Buscar",
+    "addToCart": "Añadir al carrito",
+    "priceOnRequest": "Precio bajo solicitud",
+    "material": "Material",
+    "partNumber": "N.º de pieza",
+    "back": "Volver",
+    "loading": "Cargando...",
+    "noResults": "Sin resultados.",
+    "cart": "Carrito",
+    "checkout": "Ir al pedido",
+    "contact": "Contacto",
+    "home": "Inicio"
+  },
+  "nav": {
+    "stator": "Estátor",
+    "rotor": "Rotor",
+    "cart": "Carrito",
+    "contact": "Contacto"
+  },
+  "home": {
+    "headline": "Repuestos para Bombas de Tornillo",
+    "subline": "Estátores y rotores de precisión para las principales marcas de bombas de tornillo.",
+    "statorCard": "Estátor",
+    "statorDesc": "Manguitos de estátor elastomérico para todas las marcas principales",
+    "rotorCard": "Rotor",
+    "rotorDesc": "Rotores cromados y de aleación"
+  },
+  "category": {
+    "selectManufacturer": "Seleccionar fabricante",
+    "selectModel": "Seleccionar modelo",
+    "availableProducts": "Productos disponibles",
+    "noProductsForModel": "No hay productos listados para este modelo. Contáctenos para disponibilidad."
+  },
+  "cart": {
+    "title": "Carrito de compras",
+    "empty": "Su carrito está vacío.",
+    "continueShopping": "Seguir comprando",
+    "quantity": "Cant.",
+    "remove": "Eliminar",
+    "total": "Total",
+    "itemsCount": "{count, plural, =0 {Sin artículos} =1 {1 artículo} other {# artículos}}",
+    "priceNote": "Los precios serán confirmados por nuestro equipo tras la recepción del pedido."
+  },
+  "checkout": {
+    "title": "Detalles del pedido",
+    "name": "Nombre completo",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "company": "Nombre de empresa (opcional)",
+    "notes": "Notas / Requisitos especiales",
+    "submit": "Enviar pedido",
+    "submitting": "Enviando...",
+    "success": "¡Pedido recibido! Nos pondremos en contacto en breve.",
+    "error": "Algo salió mal. Por favor, inténtelo de nuevo."
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Escríbanos para precios, disponibilidad o consultas técnicas.",
+    "name": "Nombre completo",
+    "email": "Correo electrónico",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "sending": "Enviando...",
+    "success": "Mensaje enviado. Responderemos en un día hábil.",
+    "error": "Algo salió mal. Por favor, inténtelo de nuevo.",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "emailLabel": "Correo"
+  },
+  "search": {
+    "title": "Resultados de búsqueda",
+    "resultsFor": "Resultados para \"{query}\"",
+    "noResults": "No se encontraron piezas para \"{query}\". Pruebe con otro número de pieza o código."
+  },
+  "footer": {
+    "tagline": "Repuestos de precisión para bombas de tornillo.",
+    "rights": "Todos los derechos reservados."
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "common": {
+    "search": "Search by part number or pump code",
+    "searchButton": "Search",
+    "addToCart": "Add to Cart",
+    "priceOnRequest": "Price on Request",
+    "material": "Material",
+    "partNumber": "Part No.",
+    "back": "Back",
+    "loading": "Loading...",
+    "noResults": "No results found.",
+    "cart": "Cart",
+    "checkout": "Proceed to Checkout",
+    "contact": "Contact",
+    "home": "Home"
+  },
+  "nav": {
+    "stator": "Stator",
+    "rotor": "Rotor",
+    "cart": "Cart",
+    "contact": "Contact"
+  },
+  "home": {
+    "headline": "Screw Pump Spare Parts",
+    "subline": "Precision-engineered stator and rotor replacements for leading pump manufacturers.",
+    "statorCard": "Stator",
+    "statorDesc": "Elastomer stator sleeves for all major screw pump brands",
+    "rotorCard": "Rotor",
+    "rotorDesc": "Chrome-plated and alloy rotor shafts"
+  },
+  "category": {
+    "selectManufacturer": "Select Manufacturer",
+    "selectModel": "Select Model",
+    "availableProducts": "Available Products",
+    "noProductsForModel": "No products listed for this model yet. Contact us for availability."
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty.",
+    "continueShopping": "Continue Shopping",
+    "quantity": "Qty",
+    "remove": "Remove",
+    "total": "Total",
+    "itemsCount": "{count, plural, =0 {No items} =1 {1 item} other {# items}}",
+    "priceNote": "Prices will be confirmed by our team after order submission."
+  },
+  "checkout": {
+    "title": "Order Details",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "company": "Company Name (optional)",
+    "notes": "Notes / Special Requirements",
+    "submit": "Submit Order",
+    "submitting": "Sending...",
+    "success": "Order received! We'll be in touch shortly.",
+    "error": "Something went wrong. Please try again."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch for pricing, availability, or technical questions.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "message": "Message",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent. We'll respond within one business day.",
+    "error": "Something went wrong. Please try again.",
+    "address": "Address",
+    "phone": "Phone",
+    "emailLabel": "Email"
+  },
+  "search": {
+    "title": "Search Results",
+    "resultsFor": "Results for \"{query}\"",
+    "noResults": "No parts found matching \"{query}\". Try a different part number or pump code."
+  },
+  "footer": {
+    "tagline": "Precision spare parts for screw pumps.",
+    "rights": "All rights reserved."
+  }
+}
