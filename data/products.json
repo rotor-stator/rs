@@ -2,91 +2,48 @@
   "netzsch-nemo": {
     "nm-015": {
       "stator": [
-        {
-          "id": "nn-nm015-s-nbr",
-          "partNumber": "100015-NBR",
-          "name": "NM 015 Stator NBR",
-          "description": "NM 015 stator, NBR elastomer, standard bore",
-          "material": "NBR",
-          "priceOnRequest": true
-        },
-        {
-          "id": "nn-nm015-s-epdm",
-          "partNumber": "100015-EPDM",
-          "name": "NM 015 Stator EPDM",
-          "description": "NM 015 stator, EPDM elastomer, chemical resistant",
-          "material": "EPDM",
-          "priceOnRequest": true
-        }
+        { "id": "nn-nm015-s-nbr", "partNumber": "100015-NBR", "name": "NM 015 Stator NBR", "description": "NM 015 stator, NBR elastomer, standard bore", "material": "NBR", "priceOnRequest": true },
+        { "id": "nn-nm015-s-epdm", "partNumber": "100015-EPDM", "name": "NM 015 Stator EPDM", "description": "NM 015 stator, EPDM elastomer, chemical resistant", "material": "EPDM", "priceOnRequest": true },
+        { "id": "nn-nm015-s-fkm", "partNumber": "100015-FKM", "name": "NM 015 Stator FKM", "description": "NM 015 stator, FKM (Viton) elastomer, for aggressive media", "material": "FKM (Viton)", "priceOnRequest": true }
       ],
       "rotor": [
-        {
-          "id": "nn-nm015-r-cr",
-          "partNumber": "200015-CR",
-          "name": "NM 015 Rotor Chrome",
-          "description": "NM 015 rotor, chrome-plated steel",
-          "material": "Chrome Steel",
-          "priceOnRequest": true
-        }
+        { "id": "nn-nm015-r-cr", "partNumber": "200015-CR", "name": "NM 015 Rotor Chrome", "description": "NM 015 rotor, chrome-plated steel", "material": "Chrome-Plated Steel", "priceOnRequest": true },
+        { "id": "nn-nm015-r-ss", "partNumber": "200015-SS", "name": "NM 015 Rotor Stainless", "description": "NM 015 rotor, stainless steel 316", "material": "Stainless Steel 316", "priceOnRequest": true }
       ]
     },
     "nm-031": {
       "stator": [
-        {
-          "id": "nn-nm031-s-nbr",
-          "partNumber": "100031-NBR",
-          "name": "NM 031 Stator NBR",
-          "description": "NM 031 stator, NBR elastomer",
-          "material": "NBR",
-          "priceOnRequest": true
-        },
-        {
-          "id": "nn-nm031-s-epdm",
-          "partNumber": "100031-EPDM",
-          "name": "NM 031 Stator EPDM",
-          "description": "NM 031 stator, EPDM elastomer",
-          "material": "EPDM",
-          "priceOnRequest": true
-        }
+        { "id": "nn-nm031-s-nbr", "partNumber": "100031-NBR", "name": "NM 031 Stator NBR", "description": "NM 031 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true },
+        { "id": "nn-nm031-s-epdm", "partNumber": "100031-EPDM", "name": "NM 031 Stator EPDM", "description": "NM 031 stator, EPDM elastomer", "material": "EPDM", "priceOnRequest": true }
       ],
       "rotor": [
-        {
-          "id": "nn-nm031-r-cr",
-          "partNumber": "200031-CR",
-          "name": "NM 031 Rotor Chrome",
-          "description": "NM 031 rotor, chrome-plated steel",
-          "material": "Chrome Steel",
-          "priceOnRequest": true
-        }
+        { "id": "nn-nm031-r-cr", "partNumber": "200031-CR", "name": "NM 031 Rotor Chrome", "description": "NM 031 rotor, chrome-plated steel", "material": "Chrome-Plated Steel", "priceOnRequest": true }
       ]
     },
     "nm-045": {
       "stator": [
-        {
-          "id": "nn-nm045-s-nbr",
-          "partNumber": "100045-NBR",
-          "name": "NM 045 Stator NBR",
-          "description": "NM 045 stator, NBR elastomer",
-          "material": "NBR",
-          "priceOnRequest": true
-        }
+        { "id": "nn-nm045-s-nbr", "partNumber": "100045-NBR", "name": "NM 045 Stator NBR", "description": "NM 045 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true },
+        { "id": "nn-nm045-s-epdm", "partNumber": "100045-EPDM", "name": "NM 045 Stator EPDM", "description": "NM 045 stator, EPDM elastomer", "material": "EPDM", "priceOnRequest": true }
       ],
-      "rotor": []
+      "rotor": [
+        { "id": "nn-nm045-r-cr", "partNumber": "200045-CR", "name": "NM 045 Rotor Chrome", "description": "NM 045 rotor, chrome-plated steel", "material": "Chrome-Plated Steel", "priceOnRequest": true }
+      ]
     },
     "nm-063": {
       "stator": [
-        {
-          "id": "nn-nm063-s-nbr",
-          "partNumber": "100063-NBR",
-          "name": "NM 063 Stator NBR",
-          "description": "NM 063 stator, NBR elastomer",
-          "material": "NBR",
-          "priceOnRequest": true
-        }
+        { "id": "nn-nm063-s-nbr", "partNumber": "100063-NBR", "name": "NM 063 Stator NBR", "description": "NM 063 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true }
+      ],
+      "rotor": [
+        { "id": "nn-nm063-r-cr", "partNumber": "200063-CR", "name": "NM 063 Rotor Chrome", "description": "NM 063 rotor, chrome-plated steel", "material": "Chrome-Plated Steel", "priceOnRequest": true }
+      ]
+    },
+    "nm-076": {
+      "stator": [
+        { "id": "nn-nm076-s-nbr", "partNumber": "100076-NBR", "name": "NM 076 Stator NBR", "description": "NM 076 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true }
       ],
       "rotor": []
     },
-    "nm-076": {
+    "nm-090": {
       "stator": [],
       "rotor": []
     }
@@ -94,36 +51,16 @@
   "seepex": {
     "bw-10-6l": {
       "stator": [
-        {
-          "id": "spx-bw10-s-nbr",
-          "partNumber": "BW10-S-NBR",
-          "name": "BW 10-6L Stator NBR",
-          "description": "Seepex BW 10-6L stator, NBR rubber",
-          "material": "NBR",
-          "priceOnRequest": true
-        }
+        { "id": "spx-bw10-s-nbr", "partNumber": "BW10-S-NBR", "name": "BW 10-6L Stator NBR", "description": "Seepex BW 10-6L stator, NBR rubber", "material": "NBR", "priceOnRequest": true },
+        { "id": "spx-bw10-s-epdm", "partNumber": "BW10-S-EPDM", "name": "BW 10-6L Stator EPDM", "description": "Seepex BW 10-6L stator, EPDM rubber", "material": "EPDM", "priceOnRequest": true }
       ],
       "rotor": [
-        {
-          "id": "spx-bw10-r-cr",
-          "partNumber": "BW10-R-CR",
-          "name": "BW 10-6L Rotor Chrome",
-          "description": "Seepex BW 10-6L rotor, chrome steel",
-          "material": "Chrome Steel",
-          "priceOnRequest": true
-        }
+        { "id": "spx-bw10-r-cr", "partNumber": "BW10-R-CR", "name": "BW 10-6L Rotor Chrome", "description": "Seepex BW 10-6L rotor, chrome steel", "material": "Chrome-Plated Steel", "priceOnRequest": true }
       ]
     },
     "bw-17-6l": {
       "stator": [
-        {
-          "id": "spx-bw17-s-nbr",
-          "partNumber": "BW17-S-NBR",
-          "name": "BW 17-6L Stator NBR",
-          "description": "Seepex BW 17-6L stator, NBR rubber",
-          "material": "NBR",
-          "priceOnRequest": true
-        }
+        { "id": "spx-bw17-s-nbr", "partNumber": "BW17-S-NBR", "name": "BW 17-6L Stator NBR", "description": "Seepex BW 17-6L stator, NBR rubber", "material": "NBR", "priceOnRequest": true }
       ],
       "rotor": []
     },
@@ -133,18 +70,54 @@
     },
     "md-012-12": {
       "stator": [
-        {
-          "id": "spx-md012-s-nbr",
-          "partNumber": "MD012-S-NBR",
-          "name": "MD 012-12 Stator NBR",
-          "description": "Seepex MD 012-12 stator, NBR elastomer",
-          "material": "NBR",
-          "priceOnRequest": true
-        }
+        { "id": "spx-md012-s-nbr", "partNumber": "MD012-S-NBR", "name": "MD 012-12 Stator NBR", "description": "Seepex MD 012-12 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true },
+        { "id": "spx-md012-s-fkm", "partNumber": "MD012-S-FKM", "name": "MD 012-12 Stator FKM", "description": "Seepex MD 012-12 stator, FKM (Viton) elastomer", "material": "FKM (Viton)", "priceOnRequest": true }
+      ],
+      "rotor": [
+        { "id": "spx-md012-r-cr", "partNumber": "MD012-R-CR", "name": "MD 012-12 Rotor Chrome", "description": "Seepex MD 012-12 rotor, chrome steel", "material": "Chrome-Plated Steel", "priceOnRequest": true }
+      ]
+    },
+    "md-017-12": {
+      "stator": [
+        { "id": "spx-md017-s-nbr", "partNumber": "MD017-S-NBR", "name": "MD 017-12 Stator NBR", "description": "Seepex MD 017-12 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true }
       ],
       "rotor": []
     },
-    "md-017-12": {
+    "md-024-12": {
+      "stator": [],
+      "rotor": []
+    }
+  },
+  "mono": {
+    "c-cd020": {
+      "stator": [
+        { "id": "mono-cd020-s-nbr", "partNumber": "CD020-S-NBR", "name": "CD020 Stator NBR", "description": "Mono CD020 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true },
+        { "id": "mono-cd020-s-epdm", "partNumber": "CD020-S-EPDM", "name": "CD020 Stator EPDM", "description": "Mono CD020 stator, EPDM elastomer", "material": "EPDM", "priceOnRequest": true }
+      ],
+      "rotor": [
+        { "id": "mono-cd020-r-cr", "partNumber": "CD020-R-CR", "name": "CD020 Rotor Chrome", "description": "Mono CD020 rotor, chrome-plated steel", "material": "Chrome-Plated Steel", "priceOnRequest": true }
+      ]
+    },
+    "c-cd025": {
+      "stator": [
+        { "id": "mono-cd025-s-nbr", "partNumber": "CD025-S-NBR", "name": "CD025 Stator NBR", "description": "Mono CD025 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true }
+      ],
+      "rotor": []
+    },
+    "c-cd032": {
+      "stator": [],
+      "rotor": []
+    },
+    "e-e040": {
+      "stator": [
+        { "id": "mono-e040-s-nbr", "partNumber": "E040-S-NBR", "name": "E040 Stator NBR", "description": "Mono E040 stator, NBR elastomer", "material": "NBR", "priceOnRequest": true },
+        { "id": "mono-e040-s-epdm", "partNumber": "E040-S-EPDM", "name": "E040 Stator EPDM", "description": "Mono E040 stator, EPDM elastomer", "material": "EPDM", "priceOnRequest": true }
+      ],
+      "rotor": [
+        { "id": "mono-e040-r-ss", "partNumber": "E040-R-SS", "name": "E040 Rotor Stainless", "description": "Mono E040 rotor, stainless steel 316", "material": "Stainless Steel 316", "priceOnRequest": true }
+      ]
+    },
+    "e-e050": {
       "stator": [],
       "rotor": []
     }

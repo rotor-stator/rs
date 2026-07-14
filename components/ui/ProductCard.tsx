@@ -8,9 +8,10 @@ import { useState } from "react";
 
 interface Props {
   product: Product;
+  highlighted?: boolean;
 }
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, highlighted = false }: Props) {
   const t = useTranslations("common");
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
@@ -24,14 +25,16 @@ export default function ProductCard({ product }: Props) {
   return (
     <div
       style={{
-        border: "1px solid var(--color-rs-border)",
+        border: highlighted ? "1px solid var(--color-rs-orange)" : "1px solid var(--color-rs-border)",
+        borderLeft: highlighted ? "3px solid var(--color-rs-orange)" : "1px solid var(--color-rs-border)",
         borderRadius: 4,
         padding: "20px 24px",
-        backgroundColor: "#fff",
+        backgroundColor: highlighted ? "#FDF3EC" : "#fff",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         gap: 16,
+        transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
       <div>

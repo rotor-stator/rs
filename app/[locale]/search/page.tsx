@@ -12,15 +12,17 @@ interface Props {
 function getAllProducts(): Product[] {
   const products: Product[] = [];
   for (const mfr of manufacturers) {
-    for (const model of mfr.models) {
-      const data = (productsData as Record<string, Record<string, { stator: Omit<Product, "id" | "manufacturer" | "model" | "category">[]; rotor: Omit<Product, "id" | "manufacturer" | "model" | "category">[] }>>);
-      const entry = data[mfr.id]?.[model.id];
-      if (!entry) continue;
-      for (const p of entry.stator ?? []) {
-        products.push({ ...p, id: p.partNumber, manufacturer: mfr.id, model: model.id, category: "stator" });
-      }
-      for (const p of entry.rotor ?? []) {
-        products.push({ ...p, id: p.partNumber, manufacturer: mfr.id, model: model.id, category: "rotor" });
+    for (const series of mfr.series) {
+      for (const model of series.models) {
+        const data = (productsData as Record<string, Record<string, { stator: Omit<Product, "id" | "manufacturer" | "model" | "category">[]; rotor: Omit<Product, "id" | "manufacturer" | "model" | "category">[] }>>);
+        const entry = data[mfr.id]?.[model.id];
+        if (!entry) continue;
+        for (const p of entry.stator ?? []) {
+          products.push({ ...p, id: p.partNumber, manufacturer: mfr.id, series: series.id, model: model.id, category: "stator" });
+        }
+        for (const p of entry.rotor ?? []) {
+          products.push({ ...p, id: p.partNumber, manufacturer: mfr.id, series: series.id, model: model.id, category: "rotor" });
+        }
       }
     }
   }

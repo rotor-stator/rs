@@ -6,6 +6,7 @@ export interface Product {
   name: string;
   description: string;
   manufacturer: string;
+  series?: string;
   model: string;
   category: ProductCategory;
   material?: string;

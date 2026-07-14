@@ -26,10 +26,25 @@
     "statorCard": "Stator",
     "statorDesc": "Elastomer stator sleeves for all major screw pump brands",
     "rotorCard": "Rotor",
-    "rotorDesc": "Chrome-plated and alloy rotor shafts"
+    "rotorDesc": "Chrome-plated and alloy rotor shafts",
+    "heroEyebrow": "OEM-Grade Replacement Parts",
+    "heroTitle": "Rotor and Stator",
+    "heroTitleAccent": "Made in Germany",
+    "heroTagline": "Precision replacements for Netzsch Nemo, Seepex, and other leading OEM pump lines — engineered to original tolerances and ready to ship.",
+    "heroCta": "Find Your Part",
+    "selectorTitle": "Select Your Rotor or Stator",
+    "selectorSubtitle": "Six steps from pump brand to the exact part you need.",
+    "stepCategory": "Part Type",
+    "stepManufacturer": "Manufacturer",
+    "stepSeries": "Series",
+    "stepModel": "Model",
+    "stepMaterial": "Material",
+    "viewProduct": "View Product",
+    "changeSelection": "Change"
   },
   "category": {
     "selectManufacturer": "Select Manufacturer",
+    "selectSeries": "Select Series",
     "selectModel": "Select Model",
     "availableProducts": "Available Products",
     "noProductsForModel": "No products listed for this model yet. Contact us for availability."

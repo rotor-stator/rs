@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartContext";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const LOCALES = [
   { code: "en", label: "EN", flag: "🇬🇧" },
@@ -46,14 +46,7 @@ export default function Header() {
       >
         {/* Logo */}
         <Link href={`/${locale}`} style={{ display: "flex", alignItems: "center" }}>
-          <Image
-            src="/Logo.png"
-            alt="RotorStator"
-            width={160}
-            height={44}
-            style={{ objectFit: "contain", height: 40, width: "auto" }}
-            priority
-          />
+          <Logo variant="dark" height={28} />
         </Link>
 
         {/* Right side */}

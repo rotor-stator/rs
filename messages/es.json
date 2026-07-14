@@ -26,10 +26,25 @@
     "statorCard": "Estátor",
     "statorDesc": "Manguitos de estátor elastomérico para todas las marcas principales",
     "rotorCard": "Rotor",
-    "rotorDesc": "Rotores cromados y de aleación"
+    "rotorDesc": "Rotores cromados y de aleación",
+    "heroEyebrow": "Repuestos de Calidad OEM",
+    "heroTitle": "Rotor y Estátor",
+    "heroTitleAccent": "Fabricado en Alemania",
+    "heroTagline": "Repuestos de precisión para Netzsch Nemo, Seepex y otras marcas líderes de bombas OEM — fabricados según las tolerancias originales y listos para enviar.",
+    "heroCta": "Encuentra tu Repuesto",
+    "selectorTitle": "Selecciona tu Rotor o Estátor",
+    "selectorSubtitle": "Seis pasos desde la marca de bomba hasta la pieza exacta que necesitas.",
+    "stepCategory": "Tipo de Pieza",
+    "stepManufacturer": "Fabricante",
+    "stepSeries": "Serie",
+    "stepModel": "Modelo",
+    "stepMaterial": "Material",
+    "viewProduct": "Ver Producto",
+    "changeSelection": "Cambiar"
   },
   "category": {
     "selectManufacturer": "Seleccionar fabricante",
+    "selectSeries": "Seleccionar serie",
     "selectModel": "Seleccionar modelo",
     "availableProducts": "Productos disponibles",
     "noProductsForModel": "No hay productos listados para este modelo. Contáctenos para disponibilidad."
