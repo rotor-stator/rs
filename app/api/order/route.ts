@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { CartItem } from "@/lib/types";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const COMPANY_EMAIL = "info@rotorstator.com";
+const BCC_EMAIL = "mike@rotorstator.com";
 
 interface OrderPayload {
   name: string;
@@ -51,31 +51,18 @@ export async function POST(req: NextRequest) {
 
   const companyLine = company ? `<p><strong>Company:</strong> ${company}</p>` : "";
   const notesLine = notes ? `<p><strong>Notes:</strong> ${notes}</p>` : "";
+  const submittedAt = new Date().toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "medium",
+  });
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const locationLine = ip ? `<p><strong>Location (IP):</strong> ${ip}</p>` : "";
 
   try {
-    // Email to company
-    await resend.emails.send({
-      from: "RotorStator Orders <orders@rotorstator.com>",
-      to: COMPANY_EMAIL,
-      subject: `New Order from ${name}`,
-      html: `
-        <div style="font-family:sans-serif;max-width:600px">
-          <h2 style="color:#141820;border-bottom:2px solid #D4621A;padding-bottom:8px">New Order Received</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          ${companyLine}
-          ${notesLine}
-          <h3 style="margin-top:24px">Order Items</h3>
-          ${orderTable(items)}
-        </div>
-      `,
-    });
-
-    // Confirmation email to customer
     await resend.emails.send({
       from: "RotorStator <info@rotorstator.com>",
       to: email,
+      bcc: BCC_EMAIL,
       subject: "Order Received — RotorStator",
       html: `
         <div style="font-family:sans-serif;max-width:600px">
@@ -83,7 +70,15 @@ export async function POST(req: NextRequest) {
             Thank you, ${name}!
           </h2>
           <p>We have received your order. Our team will review it and contact you shortly with pricing and availability.</p>
-          <h3>Your Order</h3>
+          <h3 style="margin-top:24px">Order Details</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          ${companyLine}
+          ${notesLine}
+          <p><strong>Submitted:</strong> ${submittedAt}</p>
+          ${locationLine}
+          <h3 style="margin-top:24px">Your Order</h3>
           ${orderTable(items)}
           <p style="margin-top:24px;color:#5A6478;font-size:13px">
             Questions? Reply to this email or call us directly.
