@@ -86,7 +86,15 @@
     "error": "Something went wrong. Please try again.",
     "address": "Address",
     "phone": "Phone",
-    "emailLabel": "Email"
+    "emailLabel": "Email",
+    "contactPerson": "Contact Person"
+  },
+  "company": {
+    "companyName": "XLT Limited Co.",
+    "companyAddress": "No. 5, 17/F, Strand 50, 50 Bonham Strand, Sheung Wan, Hong Kong",
+    "companyPhone": "+852 64522738",
+    "companyEmail": "mike@rotorstator.com",
+    "contactPersonName": "Mike Lee Jones"
   },
   "search": {
     "title": "Search Results",

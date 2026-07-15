@@ -6,11 +6,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
 import Logo from "@/components/Logo";
+import { routing } from "@/i18n/routing";
 
-const LOCALES = [
-  { code: "en", label: "EN", flag: "🇬🇧" },
-  { code: "es", label: "ES", flag: "🇪🇸" },
-];
+// Add an entry here whenever a new locale is added to routing.locales.
+const LOCALE_META: Record<string, { label: string; flag: string }> = {
+  en: { label: "EN", flag: "🇬🇧" },
+  es: { label: "ES", flag: "🇪🇸" },
+};
 
 export default function Header() {
   const { totalItems } = useCart();
@@ -117,31 +119,36 @@ export default function Header() {
             )}
           </Link>
 
-          {/* Language switcher */}
-          <div style={{ display: "flex", gap: 4 }}>
-            {LOCALES.map(({ code, label, flag }) => (
-              <button
-                key={code}
-                onClick={() => switchLocale(code)}
-                style={{
-                  background: locale === code ? "var(--color-rs-orange)" : "transparent",
-                  border: "1px solid",
-                  borderColor:
-                    locale === code ? "var(--color-rs-orange)" : "var(--color-rs-mid)",
-                  color: locale === code ? "#fff" : "var(--color-rs-border)",
-                  borderRadius: 2,
-                  padding: "2px 8px",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.05em",
-                  cursor: "pointer",
-                  fontFamily: "var(--font-sans)",
-                }}
-              >
-                {flag} {label}
-              </button>
-            ))}
-          </div>
+          {/* Language switcher — hidden while only one locale is configured */}
+          {routing.locales.length > 1 && (
+            <div style={{ display: "flex", gap: 4 }}>
+              {routing.locales.map((code) => {
+                const meta = LOCALE_META[code] ?? { label: code.toUpperCase(), flag: "" };
+                return (
+                  <button
+                    key={code}
+                    onClick={() => switchLocale(code)}
+                    style={{
+                      background: locale === code ? "var(--color-rs-orange)" : "transparent",
+                      border: "1px solid",
+                      borderColor:
+                        locale === code ? "var(--color-rs-orange)" : "var(--color-rs-mid)",
+                      color: locale === code ? "#fff" : "var(--color-rs-border)",
+                      borderRadius: 2,
+                      padding: "2px 8px",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.05em",
+                      cursor: "pointer",
+                      fontFamily: "var(--font-sans)",
+                    }}
+                  >
+                    {meta.flag} {meta.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </header>

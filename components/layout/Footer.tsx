@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 
 export default function Footer() {
   const t = useTranslations("footer");
+  const tc = useTranslations("company");
 
   return (
     <footer
@@ -39,7 +40,7 @@ export default function Footer() {
             margin: 0,
           }}
         >
-          © {new Date().getFullYear()} RotorStator. {t("rights")}
+          © {new Date().getFullYear()} {tc("companyName")}. {t("rights")}
         </p>
       </div>
     </footer>

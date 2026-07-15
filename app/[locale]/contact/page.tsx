@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, User } from "lucide-react";
 
 export default function ContactPage() {
   const t = useTranslations("contact");
+  const tc = useTranslations("company");
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
@@ -118,23 +119,36 @@ export default function ContactPage() {
             borderLeft: "3px solid var(--color-rs-orange)",
           }}
         >
+          <p
+            style={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: "var(--color-rs-ink)",
+              margin: "0 0 24px",
+            }}
+          >
+            {tc("companyName")}
+          </p>
+          <ContactRow icon={<User size={16} />} label={t("contactPerson")}>
+            <span>{tc("contactPersonName")}</span>
+          </ContactRow>
           <ContactRow icon={<MapPin size={16} />} label={t("address")}>
-            <span>İstanbul, Türkiye</span>
+            <span>{tc("companyAddress")}</span>
           </ContactRow>
           <ContactRow icon={<Phone size={16} />} label={t("phone")}>
             <a
-              href="tel:+90000000000"
+              href={`tel:${tc("companyPhone").replace(/\s+/g, "")}`}
               style={{ color: "var(--color-rs-ink)", textDecoration: "none" }}
             >
-              +90 000 000 00 00
+              {tc("companyPhone")}
             </a>
           </ContactRow>
           <ContactRow icon={<Mail size={16} />} label={t("emailLabel")}>
             <a
-              href="mailto:info@rotorstator.com"
+              href={`mailto:${tc("companyEmail")}`}
               style={{ color: "var(--color-rs-orange)", textDecoration: "none" }}
             >
-              info@rotorstator.com
+              {tc("companyEmail")}
             </a>
           </ContactRow>
         </div>
