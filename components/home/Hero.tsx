@@ -33,20 +33,6 @@ export default function Hero() {
       >
         {/* Left column */}
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <span
-            style={{
-              display: "inline-block",
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--color-rs-orange)",
-              marginBottom: 20,
-            }}
-          >
-            {t("heroEyebrow")}
-          </span>
-
           <h1
             style={{
               fontSize: "clamp(36px, 5vw, 56px)",
@@ -123,14 +109,14 @@ export default function Hero() {
               zIndex: 0,
             }}
           />
-          {/* Device frame */}
+          {/* Device frame — aspect ratio matches head-pic.png's native 1536×870 */}
           <div
             style={{
               position: "relative",
               zIndex: 1,
               width: "100%",
-              maxWidth: 420,
-              aspectRatio: "1 / 1",
+              maxWidth: 480,
+              aspectRatio: "1536 / 870",
               padding: 18,
               borderRadius: 32,
               background: "linear-gradient(155deg, #2B3140, #141820)",
@@ -152,8 +138,8 @@ export default function Hero() {
                 src="/head-pic.png"
                 alt="OEM-grade replacement rotor and stator"
                 fill
-                style={{ objectFit: "cover" }}
-                sizes="(max-width: 860px) 90vw, 420px"
+                style={{ objectFit: "contain" }}
+                sizes="(max-width: 860px) 90vw, 480px"
                 priority
               />
             </div>
