@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import RotorStatorIllustration from "./RotorStatorIllustration";
+import Image from "next/image";
 
 export default function Hero() {
   const t = useTranslations("home");
@@ -49,20 +49,16 @@ export default function Hero() {
 
           <h1
             style={{
-              fontSize: "clamp(40px, 6vw, 72px)",
+              fontSize: "clamp(36px, 5vw, 56px)",
               fontWeight: 800,
               lineHeight: 1.15,
               letterSpacing: "-0.03em",
               textTransform: "uppercase",
+              color: "var(--color-rs-ink)",
               margin: "0 0 28px",
             }}
           >
-            <span style={{ display: "block", color: "var(--color-rs-ink)" }}>
-              {t("heroTitle")}
-            </span>
-            <span style={{ display: "block", color: "var(--color-rs-orange)" }}>
-              {t("heroTitleAccent")}
-            </span>
+            {t("heroTitle")}
           </h1>
 
           <p
@@ -144,18 +140,22 @@ export default function Hero() {
           >
             <div
               style={{
+                position: "relative",
                 width: "100%",
                 height: "100%",
                 borderRadius: 20,
                 backgroundColor: "#F0F2F5",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 overflow: "hidden",
-                padding: 24,
               }}
             >
-              <RotorStatorIllustration />
+              <Image
+                src="/head-pic.png"
+                alt="OEM-grade replacement rotor and stator"
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 860px) 90vw, 420px"
+                priority
+              />
             </div>
           </div>
         </div>
