@@ -1,57 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-
-function PartIllustration() {
-  return (
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 320 320"
-      fill="none"
-      style={{ display: "block" }}
-    >
-      <defs>
-        <linearGradient id="rsStatorFill" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#2B3140" />
-          <stop offset="100%" stopColor="#141820" />
-        </linearGradient>
-      </defs>
-
-      {/* Stator bore */}
-      <rect
-        x="30"
-        y="110"
-        width="260"
-        height="100"
-        rx="50"
-        fill="url(#rsStatorFill)"
-        stroke="#C8CDD7"
-        strokeWidth="2"
-      />
-      {/* Thread guide lines to suggest a helical bore */}
-      {[70, 110, 150, 190, 230, 270].map((x) => (
-        <path
-          key={x}
-          d={`M ${x} 112 Q ${x + 20} 160 ${x} 208`}
-          stroke="#3A4254"
-          strokeWidth="1.5"
-          fill="none"
-        />
-      ))}
-      {/* Rotor, offset eccentrically inside the bore */}
-      <circle
-        cx="120"
-        cy="160"
-        r="46"
-        fill="none"
-        stroke="var(--color-rs-orange)"
-        strokeWidth="4"
-      />
-      <circle cx="120" cy="160" r="8" fill="var(--color-rs-orange)" />
-    </svg>
-  );
-}
+import RotorStatorIllustration from "./RotorStatorIllustration";
 
 export default function Hero() {
   const t = useTranslations("home");
@@ -101,37 +51,19 @@ export default function Hero() {
             style={{
               fontSize: "clamp(40px, 6vw, 72px)",
               fontWeight: 800,
-              lineHeight: 1.02,
+              lineHeight: 1.15,
               letterSpacing: "-0.03em",
               textTransform: "uppercase",
-              color: "var(--color-rs-ink)",
-              margin: 0,
+              margin: "0 0 28px",
             }}
           >
-            {t("heroTitle")}
-          </h1>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              marginTop: 14,
-              marginBottom: 28,
-            }}
-          >
-            <span style={{ width: 36, height: 2, backgroundColor: "var(--color-rs-orange)" }} />
-            <span
-              style={{
-                fontSize: "clamp(16px, 2vw, 20px)",
-                fontWeight: 600,
-                letterSpacing: "0.04em",
-                color: "var(--color-rs-orange)",
-              }}
-            >
+            <span style={{ display: "block", color: "var(--color-rs-ink)" }}>
+              {t("heroTitle")}
+            </span>
+            <span style={{ display: "block", color: "var(--color-rs-orange)" }}>
               {t("heroTitleAccent")}
             </span>
-          </div>
+          </h1>
 
           <p
             style={{
@@ -223,7 +155,7 @@ export default function Hero() {
                 padding: 24,
               }}
             >
-              <PartIllustration />
+              <RotorStatorIllustration />
             </div>
           </div>
         </div>
