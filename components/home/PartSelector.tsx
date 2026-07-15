@@ -61,31 +61,9 @@ export default function PartSelector() {
   }
 
   return (
-    <section
-      id="part-selector"
-      style={{ backgroundColor: "var(--color-rs-light)", padding: "88px 0", scrollMarginTop: 24 }}
-    >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ textAlign: "center", marginBottom: 48 }}>
-          <h2
-            style={{
-              fontSize: "clamp(26px, 3.4vw, 38px)",
-              fontWeight: 800,
-              letterSpacing: "-0.01em",
-              textTransform: "uppercase",
-              color: "var(--color-rs-ink)",
-              margin: "0 0 12px",
-            }}
-          >
-            {t("selectorTitle")}
-          </h2>
-          <p style={{ fontSize: 15, color: "var(--color-rs-mid)", margin: 0 }}>
-            {t("selectorSubtitle")}
-          </p>
-        </div>
-
-        <div className="rs-selector-track">
-          {category ? (
+    <>
+      <div className="rs-selector-track">
+        {category ? (
             <DockedChip
               sub={t("stepCategory")}
               label={category === "rotor" ? "Rotor" : "Stator"}
@@ -151,7 +129,6 @@ export default function PartSelector() {
               onChoose={chooseMaterial}
             />
           )}
-        </div>
       </div>
 
       <style>{`
@@ -166,7 +143,7 @@ export default function PartSelector() {
           }
         }
       `}</style>
-    </section>
+    </>
   );
 }
 

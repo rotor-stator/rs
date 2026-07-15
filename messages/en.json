@@ -1,6 +1,7 @@
 {
   "common": {
     "search": "Search by part number or pump code",
+    "searchPlaceholder": "Search by part number or pump model...",
     "searchButton": "Search",
     "addToCart": "Add to Cart",
     "priceOnRequest": "Price on Request",
@@ -9,6 +10,7 @@
     "back": "Back",
     "loading": "Loading...",
     "noResults": "No results found.",
+    "noMatches": "No matches found",
     "cart": "Cart",
     "checkout": "Proceed to Checkout",
     "contact": "Contact",
@@ -40,7 +42,9 @@
     "stepModel": "Model",
     "stepMaterial": "Material",
     "viewProduct": "View Product",
-    "changeSelection": "Change"
+    "changeSelection": "Change",
+    "browseByCategory": "or browse by category",
+    "viewAllResults": "View all results ({count})"
   },
   "category": {
     "selectManufacturer": "Select Manufacturer",
@@ -87,8 +91,27 @@
   },
   "search": {
     "title": "Search Results",
-    "resultsFor": "Results for \"{query}\"",
-    "noResults": "No parts found matching \"{query}\". Try a different part number or pump code."
+    "emptyPrompt": "Enter a part number or pump model above to search.",
+    "resultsCount": "{count, plural, =0 {No results} =1 {1 result} other {# results}} for \"{query}\"",
+    "noResultsTitle": "No Matches Found",
+    "noResultsBody": "No parts found matching \"{query}\". Try a different part number or pump model.",
+    "browseCta": "Browse by Category",
+    "filterManufacturer": "Manufacturer",
+    "filterMaterial": "Material",
+    "allManufacturers": "All Manufacturers",
+    "allMaterials": "All Materials",
+    "noFilterResults": "No results match the selected filters.",
+    "resetFilters": "Reset filters"
+  },
+  "product": {
+    "breadcrumbHome": "Home",
+    "notFoundTitle": "Product Not Found",
+    "notFoundBody": "We couldn't find a part with that ID.",
+    "notFoundCta": "Browse by Category",
+    "manufacturer": "Manufacturer",
+    "series": "Series",
+    "model": "Model",
+    "category": "Category"
   },
   "footer": {
     "tagline": "Precision spare parts for screw pumps.",

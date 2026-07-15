@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import Hero from "@/components/home/Hero";
-import PartSelector from "@/components/home/PartSelector";
+import PartFinder from "@/components/home/PartFinder";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -16,7 +16,7 @@ export default function HomePage() {
   return (
     <div>
       <Hero />
-      <PartSelector />
+      <PartFinder />
     </div>
   );
 }
