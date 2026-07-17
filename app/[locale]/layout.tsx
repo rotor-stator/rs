@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { routing } from "@/i18n/routing";
 import { CartProvider } from "@/components/cart/CartContext";
 import Header from "@/components/layout/Header";
@@ -39,6 +40,9 @@ export default async function LocaleLayout({ children, params }: Props) {
           </CartProvider>
         </NextIntlClientProvider>
       </body>
+      {process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+      )}
     </html>
   );
 }

@@ -1,12 +1,5 @@
-import manufacturers from "@/data/manufacturers";
-import productsData from "@/data/products.json";
+import { supabase } from "./supabase";
 import { Product, ProductCategory } from "./types";
-
-type RawProduct = Omit<Product, "id" | "manufacturer" | "model" | "category">;
-type ProductsData = Record<
-  string,
-  Record<string, { stator?: RawProduct[]; rotor?: RawProduct[] }>
->;
 
 export interface EnrichedProduct extends Product {
   manufacturerName: string;
@@ -14,39 +7,112 @@ export interface EnrichedProduct extends Product {
   modelName: string;
 }
 
-const CATEGORIES: ProductCategory[] = ["stator", "rotor"];
+const PART_TYPE_LABEL: Record<ProductCategory, string> = {
+  rotor: "Rotor",
+  stator: "Stator",
+};
 
-export function getAllProducts(): EnrichedProduct[] {
-  const data = productsData as ProductsData;
-  const products: EnrichedProduct[] = [];
+const PRODUCT_SELECT = `
+  id,
+  part_number,
+  part_type,
+  material,
+  price,
+  models (
+    id,
+    name,
+    series (
+      id,
+      name,
+      manufacturers ( id, name )
+    )
+  )
+`;
 
-  for (const mfr of manufacturers) {
-    for (const series of mfr.series) {
-      for (const model of series.models) {
-        const entry = data[mfr.id]?.[model.id];
-        if (!entry) continue;
-        for (const category of CATEGORIES) {
-          for (const p of entry[category] ?? []) {
-            products.push({
-              ...p,
-              id: p.partNumber,
-              manufacturer: mfr.id,
-              series: series.id,
-              model: model.id,
-              category,
-              manufacturerName: mfr.name,
-              seriesName: series.name,
-              modelName: model.name,
-            });
-          }
-        }
-      }
-    }
-  }
-
-  return products;
+interface ProductRow {
+  id: string;
+  part_number: string;
+  part_type: string;
+  material: string;
+  price: number | null;
+  models: {
+    id: string;
+    name: string;
+    series: {
+      id: string;
+      name: string;
+      manufacturers: { id: string; name: string } | null;
+    } | null;
+  } | null;
 }
 
-export function getProductById(id: string): EnrichedProduct | null {
-  return getAllProducts().find((p) => p.id === id) ?? null;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function toEnriched(row: ProductRow): EnrichedProduct {
+  const model = row.models;
+  const series = model?.series ?? null;
+  const manufacturer = series?.manufacturers ?? null;
+  const category = row.part_type as ProductCategory;
+  const modelName = model?.name ?? "";
+  const partLabel = PART_TYPE_LABEL[category] ?? row.part_type;
+
+  return {
+    id: row.id,
+    partNumber: row.part_number,
+    name: [modelName, partLabel, row.material].filter(Boolean).join(" "),
+    description: [manufacturer?.name, modelName, `${category}, ${row.material}`]
+      .filter(Boolean)
+      .join(" "),
+    manufacturer: manufacturer?.id ?? "",
+    series: series?.id,
+    model: model?.id ?? "",
+    category,
+    material: row.material,
+    price: row.price,
+    priceOnRequest: row.price == null,
+    manufacturerName: manufacturer?.name ?? "",
+    seriesName: series?.name,
+    modelName,
+  };
+}
+
+export async function getAllProducts(): Promise<EnrichedProduct[]> {
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .returns<ProductRow[]>();
+
+  if (error) throw new Error(`Failed to load products: ${error.message}`);
+  return (data ?? []).map(toEnriched);
+}
+
+export async function getProductsForModel(
+  modelId: string,
+  category: ProductCategory
+): Promise<EnrichedProduct[]> {
+  if (!UUID_RE.test(modelId)) return [];
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .eq("model_id", modelId)
+    .eq("part_type", category)
+    .returns<ProductRow[]>();
+
+  if (error) throw new Error(`Failed to load products for model: ${error.message}`);
+  return (data ?? []).map(toEnriched);
+}
+
+export async function getProductById(id: string): Promise<EnrichedProduct | null> {
+  if (!UUID_RE.test(id)) return null;
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .eq("id", id)
+    .maybeSingle()
+    .returns<ProductRow>();
+
+  if (error) throw new Error(`Failed to load product: ${error.message}`);
+  return data ? toEnriched(data) : null;
 }

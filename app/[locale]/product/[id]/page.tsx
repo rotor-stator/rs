@@ -5,20 +5,22 @@ import { getProductById } from "@/lib/products";
 import CategoryGlyph from "@/components/ui/CategoryGlyph";
 import AddToCartButton from "@/components/product/AddToCartButton";
 
+export const revalidate = 60;
+
 interface Props {
   params: Promise<{ locale: string; id: string }>;
 }
 
 export async function generateMetadata({ params }: Props) {
   const { locale, id } = await params;
-  const product = getProductById(decodeURIComponent(id));
+  const product = await getProductById(decodeURIComponent(id));
   const t = await getTranslations({ locale, namespace: "product" });
   return { title: product ? `${product.name} — RotorStator` : t("notFoundTitle") };
 }
 
 export default async function ProductDetailPage({ params }: Props) {
   const { locale, id } = await params;
-  const product = getProductById(decodeURIComponent(id));
+  const product = await getProductById(decodeURIComponent(id));
   const t = await getTranslations({ locale, namespace: "product" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
 

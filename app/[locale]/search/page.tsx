@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import PartSearchBox from "@/components/search/PartSearchBox";
 import SearchResultCard from "@/components/search/SearchResultCard";
 import { searchProducts } from "@/lib/search";
+import { EnrichedProduct } from "@/lib/products";
 
 const FILTER_THRESHOLD = 6;
 
@@ -39,7 +40,17 @@ function SearchPageContent() {
     [locale, router]
   );
 
-  const allResults = useMemo(() => searchProducts(query), [query]);
+  const [allResults, setAllResults] = useState<EnrichedProduct[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    searchProducts(query).then((results) => {
+      if (!cancelled) setAllResults(results);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
 
   const manufacturerOptions = useMemo(
     () => Array.from(new Set(allResults.map((p) => p.manufacturerName))).sort(),

@@ -1,19 +1,15 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import manufacturers from "@/data/manufacturers";
-import { rotorMaterials } from "@/data/materials";
-import productsData from "@/data/products.json";
+import { getManufacturers, ManufacturerOption } from "@/lib/catalog";
+import { materialsFor } from "@/lib/materialOptions";
+import { getProductsForModel, EnrichedProduct } from "@/lib/products";
 import ProductCard from "@/components/ui/ProductCard";
-import { Product } from "@/lib/types";
 import { ChevronRight } from "lucide-react";
 
-type ProductsData = Record<
-  string,
-  Record<string, { rotor: Omit<Product, "id" | "manufacturer" | "model" | "category">[] }>
->;
+const rotorMaterials = materialsFor("rotor");
 
 export default function RotorPage() {
   return (
@@ -27,37 +23,49 @@ function RotorPageContent() {
   const t = useTranslations("category");
   const params = useSearchParams();
 
-  const initialMfr = manufacturers.find((m) => m.id === params.get("mfr"))?.id ?? null;
-  const initialMfrData = manufacturers.find((m) => m.id === initialMfr);
-  const initialSeries =
-    initialMfrData?.series.find((s) => s.id === params.get("series"))?.id ?? null;
-  const initialSeriesData = initialMfrData?.series.find((s) => s.id === initialSeries);
-  const initialModel =
-    initialSeriesData?.models.find((m) => m.id === params.get("model"))?.id ?? null;
+  const [manufacturers, setManufacturers] = useState<ManufacturerOption[]>([]);
+  const [selectedMfr, setSelectedMfr] = useState<string | null>(null);
+  const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [products, setProducts] = useState<EnrichedProduct[]>([]);
+  const initializedFromParams = useRef(false);
+
   const materialHintName =
     rotorMaterials.find((m) => m.id === params.get("material"))?.name ?? null;
 
-  const [selectedMfr, setSelectedMfr] = useState<string | null>(initialMfr);
-  const [selectedSeries, setSelectedSeries] = useState<string | null>(initialSeries);
-  const [selectedModel, setSelectedModel] = useState<string | null>(initialModel);
+  useEffect(() => {
+    getManufacturers().then((data) => {
+      setManufacturers(data);
+      if (!initializedFromParams.current) {
+        initializedFromParams.current = true;
+        const mfr = data.find((m) => m.id === params.get("mfr"));
+        const series = mfr?.series.find((s) => s.id === params.get("series"));
+        const model = series?.models.find((m) => m.id === params.get("model"));
+        setSelectedMfr(mfr?.id ?? null);
+        setSelectedSeries(series?.id ?? null);
+        setSelectedModel(model?.id ?? null);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const mfr = manufacturers.find((m) => m.id === selectedMfr);
   const series = mfr?.series.find((s) => s.id === selectedSeries);
   const model = series?.models.find((m) => m.id === selectedModel);
 
-  const products: Product[] = (() => {
-    if (!selectedMfr || !selectedModel) return [];
-    const data = productsData as ProductsData;
-    const raw = data[selectedMfr]?.[selectedModel]?.rotor ?? [];
-    return raw.map((p) => ({
-      ...p,
-      id: p.partNumber,
-      manufacturer: selectedMfr,
-      series: selectedSeries ?? undefined,
-      model: selectedModel,
-      category: "rotor" as const,
-    }));
-  })();
+  useEffect(() => {
+    if (!selectedModel) {
+      setProducts([]);
+      return;
+    }
+    let cancelled = false;
+    getProductsForModel(selectedModel, "rotor").then((data) => {
+      if (!cancelled) setProducts(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedModel]);
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 24px" }}>

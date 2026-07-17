@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Check, ChevronRight } from "lucide-react";
-import manufacturers from "@/data/manufacturers";
-import { materialsFor } from "@/data/materials";
+import { getManufacturers, ManufacturerOption } from "@/lib/catalog";
+import { materialsFor } from "@/lib/materialOptions";
 import { ProductCategory } from "@/lib/types";
 
 interface Option {
@@ -21,10 +22,15 @@ export default function PartSelector() {
   const locale = useLocale();
   const router = useRouter();
 
+  const [manufacturers, setManufacturers] = useState<ManufacturerOption[]>([]);
   const [category, setCategory] = useState<ProductCategory | null>(null);
   const [mfrId, setMfrId] = useState<string | null>(null);
   const [seriesId, setSeriesId] = useState<string | null>(null);
   const [modelId, setModelId] = useState<string | null>(null);
+
+  useEffect(() => {
+    getManufacturers().then(setManufacturers);
+  }, []);
 
   const mfr = manufacturers.find((m) => m.id === mfrId) ?? null;
   const series = mfr?.series.find((s) => s.id === seriesId) ?? null;
@@ -328,14 +334,19 @@ function CategoryCardButton({
     >
       <div
         style={{
+          position: "relative",
           height: 140,
           background: "linear-gradient(155deg, #2B3140, #141820)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          overflow: "hidden",
         }}
       >
-        {category === "stator" ? <StatorGlyph /> : <RotorGlyph />}
+        <Image
+          src={category === "stator" ? "/stator-card.png" : "/rotor-card.png"}
+          alt={category === "stator" ? "Stator" : "Rotor"}
+          fill
+          style={{ objectFit: "contain" }}
+          sizes="(max-width: 860px) 45vw, 240px"
+        />
       </div>
       <div style={{ padding: "20px 24px" }}>
         <div
@@ -355,23 +366,3 @@ function CategoryCardButton({
   );
 }
 
-function StatorGlyph() {
-  return (
-    <svg width="88" height="88" viewBox="0 0 64 64" fill="none">
-      <rect x="8" y="8" width="48" height="48" rx="8" stroke="#C8CDD7" strokeWidth="2.5" fill="none" />
-      <ellipse cx="32" cy="32" rx="16" ry="16" stroke="var(--color-rs-orange)" strokeWidth="2.5" fill="none" />
-      <ellipse cx="32" cy="32" rx="5" ry="5" stroke="var(--color-rs-orange)" strokeWidth="2" fill="none" />
-    </svg>
-  );
-}
-
-function RotorGlyph() {
-  return (
-    <svg width="88" height="88" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="32" rx="10" ry="24" stroke="var(--color-rs-orange)" strokeWidth="2.5" fill="none" />
-      <path d="M20 16 Q32 8 44 16" stroke="#C8CDD7" strokeWidth="2" fill="none" />
-      <path d="M20 32 Q32 24 44 32" stroke="#C8CDD7" strokeWidth="2" fill="none" />
-      <path d="M20 48 Q32 40 44 48" stroke="#C8CDD7" strokeWidth="2" fill="none" />
-    </svg>
-  );
-}

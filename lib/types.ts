@@ -10,6 +10,7 @@ export interface Product {
   model: string;
   category: ProductCategory;
   material?: string;
+  price?: number | null;
   priceOnRequest: boolean;
   imageUrl?: string;
 }

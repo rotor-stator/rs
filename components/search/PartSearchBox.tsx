@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
 import { searchProducts } from "@/lib/search";
+import { EnrichedProduct } from "@/lib/products";
 
 const DEBOUNCE_MS = 300;
 const SUGGESTION_LIMIT = 5;
@@ -42,7 +43,22 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
     };
   }, []);
 
-  const allMatches = debouncedQuery.trim().length >= 2 ? searchProducts(debouncedQuery) : [];
+  const [allMatches, setAllMatches] = useState<EnrichedProduct[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (debouncedQuery.trim().length >= 2) {
+      searchProducts(debouncedQuery).then((results) => {
+        if (!cancelled) setAllMatches(results);
+      });
+    } else {
+      setAllMatches([]);
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery]);
+
   const suggestions = allMatches.slice(0, SUGGESTION_LIMIT);
   const dropdownOpen = focused && debouncedQuery.trim().length >= 2;
 
