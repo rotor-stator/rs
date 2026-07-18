@@ -56,7 +56,10 @@ export default function Hero() {
               margin: "0 0 40px",
             }}
           >
-            {t("heroTagline")}
+            <span style={{ display: "block" }}>{t("heroTaglineLine1")}</span>
+            <span style={{ display: "block", marginTop: "0.85em" }}>
+              {t("heroTaglineLine2")}
+            </span>
           </p>
 
           <button
