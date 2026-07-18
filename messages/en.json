@@ -37,7 +37,6 @@
     "stepManufacturer": "Manufacturer",
     "stepSeries": "Series",
     "stepModel": "Model",
-    "stepResults": "Available Parts",
     "viewProduct": "View Product",
     "changeSelection": "Change",
     "browseByManufacturer": "or browse by manufacturer",
@@ -108,15 +107,11 @@
     "noFilterResults": "No results match the selected filters.",
     "resetFilters": "Reset filters"
   },
-  "product": {
+  "model": {
     "breadcrumbHome": "Home",
-    "notFoundTitle": "Product Not Found",
-    "notFoundBody": "We couldn't find a part with that ID.",
-    "notFoundCta": "Browse by Category",
-    "manufacturer": "Manufacturer",
-    "series": "Series",
-    "model": "Model",
-    "category": "Category"
+    "notFoundTitle": "Model Not Found",
+    "notFoundBody": "We couldn't find a pump model with that name.",
+    "notFoundCta": "Browse by Category"
   },
   "footer": {
     "tagline": "Precision spare parts for screw pumps.",

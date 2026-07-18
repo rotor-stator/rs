@@ -5,6 +5,7 @@ export interface EnrichedProduct extends Product {
   manufacturerName: string;
   seriesName?: string;
   modelName: string;
+  modelSlug: string;
 }
 
 const PART_TYPE_LABEL: Record<ProductCategory, string> = {
@@ -21,6 +22,7 @@ const PRODUCT_SELECT = `
   models (
     id,
     name,
+    slug,
     series (
       id,
       name,
@@ -38,6 +40,7 @@ interface ProductRow {
   models: {
     id: string;
     name: string;
+    slug: string;
     series: {
       id: string;
       name: string;
@@ -48,7 +51,7 @@ interface ProductRow {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Turns a part number into a URL-safe path segment (spaces/runs of whitespace become dashes). */
+/** Turns a part number into a URL/DOM-id-safe token (spaces/runs of whitespace become dashes). */
 export function slugifyPartNumber(partNumber: string): string {
   return partNumber.trim().replace(/\s+/g, "-");
 }
@@ -78,6 +81,7 @@ function toEnriched(row: ProductRow): EnrichedProduct {
     manufacturerName: manufacturer?.name ?? "",
     seriesName: series?.name,
     modelName,
+    modelSlug: model?.slug ?? "",
   };
 }
 
@@ -129,36 +133,4 @@ export async function getProductsForModelGrouped(modelId: string): Promise<Group
     rotors: products.filter((p) => p.category === "rotor"),
     stators: products.filter((p) => p.category === "stator"),
   };
-}
-
-export async function getProductByPartNumber(partNumber: string): Promise<EnrichedProduct | null> {
-  const trimmed = partNumber.trim();
-  if (!trimmed) return null;
-
-  const { data, error } = await supabase
-    .from("products")
-    .select(PRODUCT_SELECT)
-    .eq("part_number", trimmed)
-    .maybeSingle()
-    .returns<ProductRow>();
-
-  if (error) throw new Error(`Failed to load product: ${error.message}`);
-  if (data) return toEnriched(data);
-
-  // Fall back to matching part numbers that contain spaces, since the URL
-  // slug (built by slugifyPartNumber) turns whitespace into dashes.
-  if (trimmed.includes("-")) {
-    const spaced = trimmed.replace(/-/g, " ");
-    const { data: spacedData, error: spacedError } = await supabase
-      .from("products")
-      .select(PRODUCT_SELECT)
-      .eq("part_number", spaced)
-      .maybeSingle()
-      .returns<ProductRow>();
-
-    if (spacedError) throw new Error(`Failed to load product: ${spacedError.message}`);
-    if (spacedData) return toEnriched(spacedData);
-  }
-
-  return null;
 }

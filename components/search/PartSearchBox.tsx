@@ -76,9 +76,11 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
     goToSearch(query);
   }
 
-  function handleSelect(partNumber: string) {
+  function handleSelect(product: EnrichedProduct) {
     setFocused(false);
-    router.push(`/${locale}/product/${encodeURIComponent(slugifyPartNumber(partNumber))}`);
+    router.push(
+      `/${locale}/model/${encodeURIComponent(product.modelSlug)}#${slugifyPartNumber(product.partNumber)}`
+    );
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -176,7 +178,7 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
               <button
                 key={item.id}
                 type="button"
-                onClick={() => handleSelect(item.partNumber)}
+                onClick={() => handleSelect(item)}
                 style={{
                   display: "flex",
                   alignItems: "center",

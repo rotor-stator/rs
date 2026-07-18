@@ -33,7 +33,7 @@ export default function SearchResultCard({ product }: Props) {
 
   return (
     <Link
-      href={`/${locale}/product/${encodeURIComponent(slugifyPartNumber(product.partNumber))}`}
+      href={`/${locale}/model/${encodeURIComponent(product.modelSlug)}#${slugifyPartNumber(product.partNumber)}`}
       style={{ textDecoration: "none", display: "block" }}
     >
       <div
