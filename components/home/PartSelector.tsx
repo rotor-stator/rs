@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-import { Check, ChevronRight } from "lucide-react";
+import { Check } from "lucide-react";
 import { getManufacturers, ManufacturerOption } from "@/lib/catalog";
-import { materialsFor } from "@/lib/materialOptions";
-import { ProductCategory } from "@/lib/types";
+import { getProductsForModelGrouped, slugifyPartNumber, EnrichedProduct } from "@/lib/products";
 
 interface Option {
   id: string;
@@ -19,11 +17,8 @@ const PANEL_TRANSITION = { duration: 0.35, ease: "easeOut" as const };
 
 export default function PartSelector() {
   const t = useTranslations("home");
-  const locale = useLocale();
-  const router = useRouter();
 
   const [manufacturers, setManufacturers] = useState<ManufacturerOption[]>([]);
-  const [category, setCategory] = useState<ProductCategory | null>(null);
   const [mfrId, setMfrId] = useState<string | null>(null);
   const [seriesId, setSeriesId] = useState<string | null>(null);
   const [modelId, setModelId] = useState<string | null>(null);
@@ -35,14 +30,7 @@ export default function PartSelector() {
   const mfr = manufacturers.find((m) => m.id === mfrId) ?? null;
   const series = mfr?.series.find((s) => s.id === seriesId) ?? null;
   const model = series?.models.find((m) => m.id === modelId) ?? null;
-  const materials = category ? materialsFor(category) : [];
 
-  function chooseCategory(c: ProductCategory) {
-    setCategory(c);
-    setMfrId(null);
-    setSeriesId(null);
-    setModelId(null);
-  }
   function chooseMfr(id: string) {
     setMfrId(id);
     setSeriesId(null);
@@ -55,86 +43,50 @@ export default function PartSelector() {
   function chooseModel(id: string) {
     setModelId(id);
   }
-  function chooseMaterial(materialId: string) {
-    if (!category || !mfrId || !seriesId || !modelId) return;
-    const qs = new URLSearchParams({
-      mfr: mfrId,
-      series: seriesId,
-      model: modelId,
-      material: materialId,
-    });
-    router.push(`/${locale}/${category}?${qs.toString()}`);
-  }
 
   return (
     <>
       <div className="rs-selector-track">
-        {category ? (
+        {mfr ? (
+          <DockedChip
+            sub={t("stepManufacturer")}
+            label={mfr.name}
+            onReopen={() => {
+              setMfrId(null);
+              setSeriesId(null);
+              setModelId(null);
+            }}
+          />
+        ) : (
+          <OptionPanel title={t("stepManufacturer")} items={manufacturers} onChoose={chooseMfr} />
+        )}
+
+        {mfr &&
+          (series ? (
             <DockedChip
-              sub={t("stepCategory")}
-              label={category === "rotor" ? "Rotor" : "Stator"}
+              sub={t("stepSeries")}
+              label={series.name}
               onReopen={() => {
-                setCategory(null);
-                setMfrId(null);
                 setSeriesId(null);
                 setModelId(null);
               }}
             />
           ) : (
-            <CategoryPanel onChoose={chooseCategory} />
-          )}
+            <OptionPanel title={t("stepSeries")} items={mfr.series} onChoose={chooseSeries} />
+          ))}
 
-          {category &&
-            (mfr ? (
-              <DockedChip
-                sub={t("stepManufacturer")}
-                label={mfr.name}
-                onReopen={() => {
-                  setMfrId(null);
-                  setSeriesId(null);
-                  setModelId(null);
-                }}
-              />
-            ) : (
-              <OptionPanel
-                title={t("stepManufacturer")}
-                items={manufacturers}
-                onChoose={chooseMfr}
-              />
-            ))}
-
-          {mfr &&
-            (series ? (
-              <DockedChip
-                sub={t("stepSeries")}
-                label={series.name}
-                onReopen={() => {
-                  setSeriesId(null);
-                  setModelId(null);
-                }}
-              />
-            ) : (
-              <OptionPanel title={t("stepSeries")} items={mfr.series} onChoose={chooseSeries} />
-            ))}
-
-          {series &&
-            (model ? (
-              <DockedChip
-                sub={t("stepModel")}
-                label={model.name}
-                onReopen={() => setModelId(null)}
-              />
-            ) : (
-              <OptionPanel title={t("stepModel")} items={series.models} onChoose={chooseModel} />
-            ))}
-
-          {model && (
-            <OptionPanel
-              title={t("stepMaterial")}
-              items={materials}
-              onChoose={chooseMaterial}
+        {series &&
+          (model ? (
+            <DockedChip
+              sub={t("stepModel")}
+              label={model.name}
+              onReopen={() => setModelId(null)}
             />
-          )}
+          ) : (
+            <OptionPanel title={t("stepModel")} items={series.models} onChoose={chooseModel} />
+          ))}
+
+        {model && <ResultsPanel modelId={model.id} />}
       </div>
 
       <style>{`
@@ -146,6 +98,16 @@ export default function PartSelector() {
         @media (max-width: 860px) {
           .rs-selector-track {
             flex-direction: column;
+          }
+        }
+        .rs-results-groups {
+          display: flex;
+          gap: 28px;
+        }
+        @media (max-width: 860px) {
+          .rs-results-groups {
+            flex-direction: column;
+            gap: 20px;
           }
         }
       `}</style>
@@ -281,88 +243,139 @@ function OptionPanel({
   );
 }
 
-function CategoryPanel({ onChoose }: { onChoose: (c: ProductCategory) => void }) {
+function ResultsPanel({ modelId }: { modelId: string }) {
+  const t = useTranslations("home");
+  const tCategory = useTranslations("category");
+  const tCommon = useTranslations("common");
+  const tNav = useTranslations("nav");
+  const locale = useLocale();
+
+  const [loading, setLoading] = useState(true);
+  const [rotors, setRotors] = useState<EnrichedProduct[]>([]);
+  const [stators, setStators] = useState<EnrichedProduct[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    getProductsForModelGrouped(modelId).then((data) => {
+      if (cancelled) return;
+      setRotors(data.rotors);
+      setStators(data.stators);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [modelId]);
+
+  const hasResults = rotors.length > 0 || stators.length > 0;
+
   return (
     <motion.div
+      key={modelId}
       initial={{ opacity: 0, x: 16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={PANEL_TRANSITION}
       style={{
-        flex: "1 1 auto",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
+        flex: "2 1 420px",
+        minWidth: 0,
+        padding: 24,
+        border: "1px solid var(--color-rs-border)",
+        borderRadius: 4,
+        backgroundColor: "#fff",
       }}
     >
-      <CategoryCardButton category="rotor" onChoose={onChoose} />
-      <CategoryCardButton category="stator" onChoose={onChoose} />
+      <h3
+        style={{
+          fontSize: 11,
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "var(--color-rs-mid)",
+          margin: "0 0 16px",
+        }}
+      >
+        {t("stepResults")}
+      </h3>
+
+      {loading ? (
+        <p style={{ fontSize: 14, color: "var(--color-rs-mid)", margin: 0 }}>{tCommon("loading")}</p>
+      ) : !hasResults ? (
+        <p style={{ fontSize: 14, color: "var(--color-rs-mid)", margin: 0 }}>
+          {tCategory("noProductsForModel")}
+        </p>
+      ) : (
+        <div className="rs-results-groups">
+          {rotors.length > 0 && (
+            <ProductGroup title={tNav("rotor")} products={rotors} locale={locale} tCommon={tCommon} />
+          )}
+          {stators.length > 0 && (
+            <ProductGroup title={tNav("stator")} products={stators} locale={locale} tCommon={tCommon} />
+          )}
+        </div>
+      )}
     </motion.div>
   );
 }
 
-function CategoryCardButton({
-  category,
-  onChoose,
+function ProductGroup({
+  title,
+  products,
+  locale,
+  tCommon,
 }: {
-  category: ProductCategory;
-  onChoose: (c: ProductCategory) => void;
+  title: string;
+  products: EnrichedProduct[];
+  locale: string;
+  tCommon: ReturnType<typeof useTranslations>;
 }) {
   return (
-    <button
-      onClick={() => onChoose(category)}
-      style={{
-        border: "2px solid var(--color-rs-border)",
-        borderRadius: 6,
-        padding: 0,
-        background: "#fff",
-        cursor: "pointer",
-        overflow: "hidden",
-        textAlign: "left",
-        transition: "border-color 0.15s, box-shadow 0.15s",
-        fontFamily: "var(--font-sans)",
-      }}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget as HTMLButtonElement;
-        el.style.borderColor = "var(--color-rs-orange)";
-        el.style.boxShadow = "0 8px 28px rgba(212,98,26,0.14)";
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget as HTMLButtonElement;
-        el.style.borderColor = "var(--color-rs-border)";
-        el.style.boxShadow = "none";
-      }}
-    >
-      <div
+    <div style={{ flex: "1 1 0" }}>
+      <h4
         style={{
-          position: "relative",
-          height: 140,
-          background: "#fff",
-          overflow: "hidden",
+          fontSize: 12,
+          fontWeight: 800,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "var(--color-rs-ink)",
+          margin: "0 0 10px",
         }}
       >
-        <Image
-          src={category === "stator" ? "/stator-card.png" : "/rotor-card.png"}
-          alt={category === "stator" ? "Stator" : "Rotor"}
-          fill
-          style={{ objectFit: "contain" }}
-          sizes="(max-width: 860px) 45vw, 240px"
-        />
+        {title}
+      </h4>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {products.map((product) => (
+          <Link
+            key={product.id}
+            href={`/${locale}/product/${encodeURIComponent(slugifyPartNumber(product.partNumber))}`}
+            style={{
+              display: "block",
+              padding: "10px 14px",
+              border: "1.5px solid var(--color-rs-border)",
+              borderRadius: 6,
+              textDecoration: "none",
+              transition: "border-color 0.15s, background-color 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.borderColor = "var(--color-rs-orange)";
+              el.style.backgroundColor = "var(--color-rs-light)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.borderColor = "var(--color-rs-border)";
+              el.style.backgroundColor = "transparent";
+            }}
+          >
+            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--color-rs-ink)" }}>
+              {product.material || product.name}
+            </div>
+            <div style={{ fontSize: 12, color: "var(--color-rs-mid)", marginTop: 2 }}>
+              {tCommon("partNumber")}: {product.partNumber}
+            </div>
+          </Link>
+        ))}
       </div>
-      <div style={{ padding: "20px 24px" }}>
-        <div
-          style={{
-            fontSize: 22,
-            fontWeight: 800,
-            letterSpacing: "0.03em",
-            textTransform: "uppercase",
-            color: "var(--color-rs-ink)",
-          }}
-        >
-          {category}
-        </div>
-        <ChevronRight size={16} color="var(--color-rs-orange)" style={{ marginTop: 6 }} />
-      </div>
-    </button>
+    </div>
   );
 }
-

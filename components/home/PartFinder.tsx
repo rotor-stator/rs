@@ -65,7 +65,7 @@ export default function PartFinder() {
               whiteSpace: "nowrap",
             }}
           >
-            {t("browseByCategory")}
+            {t("browseByManufacturer")}
           </span>
           <span style={{ flex: 1, height: 1, backgroundColor: "var(--color-rs-border)" }} />
         </div>

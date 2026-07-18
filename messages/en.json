@@ -33,15 +33,14 @@
     "heroTagline": "Progressive Cavity Pump, Eccentric Screw Pump, Mono Pump... Whatever you call it, we have the right replacement rotor and stator.",
     "heroCta": "Find Your Part",
     "selectorTitle": "Select Your Rotor or Stator",
-    "selectorSubtitle": "Six steps from pump brand to the exact part you need.",
-    "stepCategory": "Part Type",
+    "selectorSubtitle": "Three steps from pump brand to the exact part you need.",
     "stepManufacturer": "Manufacturer",
     "stepSeries": "Series",
     "stepModel": "Model",
-    "stepMaterial": "Material",
+    "stepResults": "Available Parts",
     "viewProduct": "View Product",
     "changeSelection": "Change",
-    "browseByCategory": "or browse by category",
+    "browseByManufacturer": "or browse by manufacturer",
     "viewAllResults": "View all results ({count})"
   },
   "category": {

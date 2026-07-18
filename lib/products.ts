@@ -108,6 +108,29 @@ export async function getProductsForModel(
   return (data ?? []).map(toEnriched);
 }
 
+export interface GroupedModelProducts {
+  rotors: EnrichedProduct[];
+  stators: EnrichedProduct[];
+}
+
+/** All products for a model, split into rotor/stator groups (one query, both categories). */
+export async function getProductsForModelGrouped(modelId: string): Promise<GroupedModelProducts> {
+  if (!UUID_RE.test(modelId)) return { rotors: [], stators: [] };
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .eq("model_id", modelId)
+    .returns<ProductRow[]>();
+
+  if (error) throw new Error(`Failed to load products for model: ${error.message}`);
+  const products = (data ?? []).map(toEnriched);
+  return {
+    rotors: products.filter((p) => p.category === "rotor"),
+    stators: products.filter((p) => p.category === "stator"),
+  };
+}
+
 export async function getProductByPartNumber(partNumber: string): Promise<EnrichedProduct | null> {
   const trimmed = partNumber.trim();
   if (!trimmed) return null;
