@@ -48,6 +48,11 @@ interface ProductRow {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/** Turns a part number into a URL-safe path segment (spaces/runs of whitespace become dashes). */
+export function slugifyPartNumber(partNumber: string): string {
+  return partNumber.trim().replace(/\s+/g, "-");
+}
+
 function toEnriched(row: ProductRow): EnrichedProduct {
   const model = row.models;
   const series = model?.series ?? null;
@@ -103,16 +108,34 @@ export async function getProductsForModel(
   return (data ?? []).map(toEnriched);
 }
 
-export async function getProductById(id: string): Promise<EnrichedProduct | null> {
-  if (!UUID_RE.test(id)) return null;
+export async function getProductByPartNumber(partNumber: string): Promise<EnrichedProduct | null> {
+  const trimmed = partNumber.trim();
+  if (!trimmed) return null;
 
   const { data, error } = await supabase
     .from("products")
     .select(PRODUCT_SELECT)
-    .eq("id", id)
+    .eq("part_number", trimmed)
     .maybeSingle()
     .returns<ProductRow>();
 
   if (error) throw new Error(`Failed to load product: ${error.message}`);
-  return data ? toEnriched(data) : null;
+  if (data) return toEnriched(data);
+
+  // Fall back to matching part numbers that contain spaces, since the URL
+  // slug (built by slugifyPartNumber) turns whitespace into dashes.
+  if (trimmed.includes("-")) {
+    const spaced = trimmed.replace(/-/g, " ");
+    const { data: spacedData, error: spacedError } = await supabase
+      .from("products")
+      .select(PRODUCT_SELECT)
+      .eq("part_number", spaced)
+      .maybeSingle()
+      .returns<ProductRow>();
+
+    if (spacedError) throw new Error(`Failed to load product: ${spacedError.message}`);
+    if (spacedData) return toEnriched(spacedData);
+  }
+
+  return null;
 }

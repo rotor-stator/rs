@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
 import { searchProducts } from "@/lib/search";
-import { EnrichedProduct } from "@/lib/products";
+import { EnrichedProduct, slugifyPartNumber } from "@/lib/products";
 
 const DEBOUNCE_MS = 300;
 const SUGGESTION_LIMIT = 5;
@@ -76,9 +76,9 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
     goToSearch(query);
   }
 
-  function handleSelect(id: string) {
+  function handleSelect(partNumber: string) {
     setFocused(false);
-    router.push(`/${locale}/product/${encodeURIComponent(id)}`);
+    router.push(`/${locale}/product/${encodeURIComponent(slugifyPartNumber(partNumber))}`);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -176,7 +176,7 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
               <button
                 key={item.id}
                 type="button"
-                onClick={() => handleSelect(item.id)}
+                onClick={() => handleSelect(item.partNumber)}
                 style={{
                   display: "flex",
                   alignItems: "center",

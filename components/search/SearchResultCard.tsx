@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import CategoryGlyph from "@/components/ui/CategoryGlyph";
-import { EnrichedProduct } from "@/lib/products";
+import { EnrichedProduct, slugifyPartNumber } from "@/lib/products";
 
 interface Props {
   product: EnrichedProduct;
@@ -33,7 +33,7 @@ export default function SearchResultCard({ product }: Props) {
 
   return (
     <Link
-      href={`/${locale}/product/${encodeURIComponent(product.id)}`}
+      href={`/${locale}/product/${encodeURIComponent(slugifyPartNumber(product.partNumber))}`}
       style={{ textDecoration: "none", display: "block" }}
     >
       <div

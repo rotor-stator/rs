@@ -1,26 +1,26 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ChevronRight } from "lucide-react";
-import { getProductById } from "@/lib/products";
+import { getProductByPartNumber } from "@/lib/products";
 import CategoryGlyph from "@/components/ui/CategoryGlyph";
 import AddToCartButton from "@/components/product/AddToCartButton";
 
 export const revalidate = 60;
 
 interface Props {
-  params: Promise<{ locale: string; id: string }>;
+  params: Promise<{ locale: string; partNumber: string }>;
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { locale, id } = await params;
-  const product = await getProductById(decodeURIComponent(id));
+  const { locale, partNumber } = await params;
+  const product = await getProductByPartNumber(decodeURIComponent(partNumber));
   const t = await getTranslations({ locale, namespace: "product" });
   return { title: product ? `${product.name} — RotorStator` : t("notFoundTitle") };
 }
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { locale, id } = await params;
-  const product = await getProductById(decodeURIComponent(id));
+  const { locale, partNumber } = await params;
+  const product = await getProductByPartNumber(decodeURIComponent(partNumber));
   const t = await getTranslations({ locale, namespace: "product" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
 

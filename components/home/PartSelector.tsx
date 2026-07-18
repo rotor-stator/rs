@@ -336,7 +336,7 @@ function CategoryCardButton({
         style={{
           position: "relative",
           height: 140,
-          background: "linear-gradient(155deg, #2B3140, #141820)",
+          background: "#fff",
           overflow: "hidden",
         }}
       >
