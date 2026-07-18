@@ -109,12 +109,8 @@ export default async function ModelPage({ params }: Props) {
         <p style={{ fontSize: 15, color: "var(--color-rs-mid)" }}>{tCategory("noProductsForModel")}</p>
       ) : (
         <div className="rs-model-groups">
-          {rotors.length > 0 && (
-            <ProductGroup category="rotor" title={tNav("rotor")} products={rotors} />
-          )}
-          {stators.length > 0 && (
-            <ProductGroup category="stator" title={tNav("stator")} products={stators} />
-          )}
+          <ProductGroup category="rotor" title={tNav("rotor")} products={rotors} notAvailable={tCategory("notAvailable")} />
+          <ProductGroup category="stator" title={tNav("stator")} products={stators} notAvailable={tCategory("notAvailable")} />
         </div>
       )}
 
@@ -133,7 +129,7 @@ export default async function ModelPage({ params }: Props) {
         .rs-model-group:last-child {
           padding-right: 0;
         }
-        .rs-model-group:not(:last-child) {
+        .rs-model-group:first-child {
           border-right: 1px solid rgba(90, 100, 120, 0.2);
         }
         @media (max-width: 720px) {
@@ -143,7 +139,7 @@ export default async function ModelPage({ params }: Props) {
           .rs-model-group {
             padding: 0;
           }
-          .rs-model-group:not(:last-child) {
+          .rs-model-group:first-child {
             border-right: none;
             border-bottom: 1px solid rgba(90, 100, 120, 0.2);
             padding-bottom: 28px;
@@ -164,10 +160,12 @@ function ProductGroup({
   category,
   title,
   products,
+  notAvailable,
 }: {
   category: ProductCategory;
   title: string;
   products: Awaited<ReturnType<typeof getProductsForModelGrouped>>["rotors"];
+  notAvailable: string;
 }) {
   const image = GROUP_IMAGE[category];
 
@@ -203,11 +201,24 @@ function ProductGroup({
           }}
         />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {products.map((product) => (
-          <ProductRow key={product.id} product={product} />
-        ))}
-      </div>
+      {products.length === 0 ? (
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: 14,
+            color: "var(--color-rs-mid)",
+            padding: "20px 0",
+          }}
+        >
+          {notAvailable}
+        </p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {products.map((product) => (
+            <ProductRow key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

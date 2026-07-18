@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Check, Minus, Plus } from "lucide-react";
 import { useCart } from "@/components/cart/CartContext";
 import { EnrichedProduct, slugifyPartNumber } from "@/lib/products";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Props {
   product: EnrichedProduct;
@@ -63,7 +64,7 @@ export default function ProductRow({ product }: Props) {
 
       <div style={{ display: "flex", alignItems: "center", gap: 18, flexShrink: 0 }}>
         <span style={{ fontSize: 12, color: "var(--color-rs-mid)", fontWeight: 500 }}>
-          {t("priceOnRequest")}
+          {formatPrice(product.price) ?? t("priceOnRequest")}
         </span>
 
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import CategoryGlyph from "@/components/ui/CategoryGlyph";
 import { EnrichedProduct, slugifyPartNumber } from "@/lib/products";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Props {
   product: EnrichedProduct;
@@ -96,7 +97,7 @@ export default function SearchResultCard({ product }: Props) {
 
           <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: 12, color: "var(--color-rs-mid)", fontWeight: 500 }}>
-              {tCommon("priceOnRequest")}
+              {formatPrice(product.price) ?? tCommon("priceOnRequest")}
             </span>
             <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-rs-orange)" }}>
               {t("viewProduct")} →

@@ -3,12 +3,19 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useCart } from "@/components/cart/CartContext";
+import { formatPrice } from "@/lib/formatPrice";
 import { Trash2, Minus, Plus } from "lucide-react";
 
 export default function CartPage() {
   const t = useTranslations("cart");
+  const tCommon = useTranslations("common");
   const { items, removeItem, setQty, totalItems } = useCart();
   const locale = useLocale();
+
+  const pricedItems = items.filter(({ product }) => product.price != null);
+  const hasUnpricedItems = pricedItems.length < items.length;
+  const total = pricedItems.reduce((sum, { product, quantity }) => sum + product.price! * quantity, 0);
+  const totalDisplay = pricedItems.length > 0 ? formatPrice(total) : null;
 
   if (items.length === 0) {
     return (
@@ -138,7 +145,7 @@ export default function CartPage() {
                 margin: 0,
               }}
             >
-              On Request
+              {product.price != null ? formatPrice(product.price * quantity) : tCommon("priceOnRequest")}
             </p>
 
             {/* Remove */}
@@ -160,10 +167,44 @@ export default function CartPage() {
         ))}
       </div>
 
-      {/* Footer */}
+      {/* Total */}
       <div
         style={{
           marginTop: 24,
+          paddingTop: 16,
+          borderTop: "2px solid var(--color-rs-border)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            color: "var(--color-rs-ink)",
+          }}
+        >
+          {t("total")}
+        </span>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: "var(--color-rs-ink)" }}>
+            {totalDisplay ?? tCommon("priceOnRequest")}
+          </div>
+          {hasUnpricedItems && pricedItems.length > 0 && (
+            <div style={{ fontSize: 12, color: "var(--color-rs-mid)", marginTop: 4 }}>
+              {t("partialPricingNote")}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          marginTop: 16,
           padding: "16px",
           backgroundColor: "var(--color-rs-light)",
           borderRadius: 2,

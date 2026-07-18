@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useCart } from "@/components/cart/CartContext";
 import { Product } from "@/lib/types";
+import { formatPrice } from "@/lib/formatPrice";
 import { CheckCircle, Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -83,7 +84,7 @@ export default function ProductCard({ product, highlighted = false }: Props) {
             fontWeight: 500,
           }}
         >
-          {t("priceOnRequest")}
+          {formatPrice(product.price) ?? t("priceOnRequest")}
         </span>
         <button
           onClick={handleAdd}

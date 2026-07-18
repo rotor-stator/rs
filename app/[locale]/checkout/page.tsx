@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCart } from "@/components/cart/CartContext";
+import { formatPrice } from "@/lib/formatPrice";
 import { useRouter } from "next/navigation";
 
 interface FormState {
@@ -15,9 +16,16 @@ interface FormState {
 
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
+  const tCart = useTranslations("cart");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const { items, clearCart } = useCart();
+
+  const pricedItems = items.filter(({ product }) => product.price != null);
+  const hasUnpricedItems = pricedItems.length < items.length;
+  const total = pricedItems.reduce((sum, { product, quantity }) => sum + product.price! * quantity, 0);
+  const totalDisplay = pricedItems.length > 0 ? formatPrice(total) : null;
   const [form, setForm] = useState<FormState>({
     name: "",
     email: "",
@@ -119,11 +127,48 @@ export default function CheckoutPage() {
           }}
         >
           {items.map(({ product, quantity }) => (
-            <div key={product.id} style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>{product.name}</span>
-              <span style={{ fontWeight: 600 }}>× {quantity}</span>
+            <div key={product.id} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+              <span>
+                {product.name} <span style={{ fontWeight: 600 }}>× {quantity}</span>
+              </span>
+              <span style={{ fontWeight: 600, flexShrink: 0 }}>
+                {product.price != null ? formatPrice(product.price * quantity) : tCommon("priceOnRequest")}
+              </span>
             </div>
           ))}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginTop: 12,
+              paddingTop: 12,
+              borderTop: "1px solid var(--color-rs-border)",
+              fontWeight: 700,
+              color: "var(--color-rs-ink)",
+            }}
+          >
+            <span style={{ textTransform: "uppercase", letterSpacing: "0.06em", fontSize: 12 }}>
+              {tCart("total")}
+            </span>
+            <div style={{ textAlign: "right" }}>
+              <div>{totalDisplay ?? tCommon("priceOnRequest")}</div>
+              {hasUnpricedItems && pricedItems.length > 0 && (
+                <div
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 500,
+                    color: "var(--color-rs-mid)",
+                    marginTop: 2,
+                    textTransform: "none",
+                    letterSpacing: "normal",
+                  }}
+                >
+                  {tCart("partialPricingNote")}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

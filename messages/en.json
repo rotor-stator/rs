@@ -47,7 +47,8 @@
     "selectSeries": "Select Series",
     "selectModel": "Select Model",
     "availableProducts": "Available Products",
-    "noProductsForModel": "No products listed for this model yet. Contact us for availability."
+    "noProductsForModel": "No products listed for this model yet. Contact us for availability.",
+    "notAvailable": "Not Available"
   },
   "cart": {
     "title": "Shopping Cart",
@@ -57,7 +58,8 @@
     "remove": "Remove",
     "total": "Total",
     "itemsCount": "{count, plural, =0 {No items} =1 {1 item} other {# items}}",
-    "priceNote": "Prices will be confirmed by our team after order submission."
+    "priceNote": "Prices will be confirmed by our team after order submission.",
+    "partialPricingNote": "+ some items priced on request"
   },
   "checkout": {
     "title": "Order Details",
