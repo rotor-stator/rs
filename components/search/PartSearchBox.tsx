@@ -26,6 +26,7 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
   const [debouncedQuery, setDebouncedQuery] = useState(initialQuery);
   const [focused, setFocused] = useState(false);
   const blurTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastReported = useRef(initialQuery);
 
   useEffect(() => {
     const handle = setTimeout(() => setDebouncedQuery(query), DEBOUNCE_MS);
@@ -33,6 +34,11 @@ export default function PartSearchBox({ initialQuery = "", onChangeQuery }: Prop
   }, [query]);
 
   useEffect(() => {
+    // Only fire for a value that actually differs from what was last reported —
+    // guards against both the mount-time run (which would stomp on other URL
+    // params like ?manufacturer=) and React StrictMode's dev-mode double-invoke.
+    if (debouncedQuery === lastReported.current) return;
+    lastReported.current = debouncedQuery;
     onChangeQuery?.(debouncedQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);

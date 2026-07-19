@@ -1,15 +1,22 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import PartSearchBox from "@/components/search/PartSearchBox";
-import PartSelector from "./PartSelector";
+import { getManufacturers, ManufacturerSummary } from "@/lib/catalog";
 
 export default function PartFinder() {
   const t = useTranslations("home");
   const locale = useLocale();
   const router = useRouter();
+
+  const [manufacturers, setManufacturers] = useState<ManufacturerSummary[]>([]);
+
+  useEffect(() => {
+    getManufacturers().then(setManufacturers);
+  }, []);
 
   const handleChangeQuery = useCallback(
     (query: string) => {
@@ -70,7 +77,65 @@ export default function PartFinder() {
           <span style={{ flex: 1, height: 1, backgroundColor: "var(--color-rs-border)" }} />
         </div>
 
-        <PartSelector />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+            gap: 16,
+          }}
+        >
+          {manufacturers.map((m) => (
+            <Link
+              key={m.id}
+              href={`/${locale}/search?manufacturer=${encodeURIComponent(m.slug)}`}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 10,
+                padding: "24px 16px",
+                border: "1.5px solid var(--color-rs-border)",
+                borderRadius: 4,
+                backgroundColor: "#fff",
+                textDecoration: "none",
+                transition: "border-color 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--color-rs-orange)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--color-rs-border)";
+              }}
+            >
+              <span
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  backgroundColor: "var(--color-rs-light)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 15,
+                  fontWeight: 800,
+                  color: "var(--color-rs-mid)",
+                }}
+              >
+                {m.name.charAt(0).toUpperCase()}
+              </span>
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "var(--color-rs-ink)",
+                  textAlign: "center",
+                }}
+              >
+                {m.name}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

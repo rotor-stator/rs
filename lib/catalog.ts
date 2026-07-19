@@ -1,55 +1,80 @@
 import { supabase } from "./supabase";
 
-export interface ModelOption {
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export interface ManufacturerSummary {
   id: string;
   name: string;
   slug: string;
 }
 
-export interface SeriesOption {
+export interface SeriesSummary {
   id: string;
   name: string;
-  models: ModelOption[];
+  slug: string;
 }
 
-export interface ManufacturerOption {
+export interface ModelSummary {
   id: string;
   name: string;
-  series: SeriesOption[];
+  slug: string;
 }
 
-interface ManufacturerRow {
-  id: string;
-  name: string;
-  series: {
-    id: string;
-    name: string;
-    models: { id: string; name: string; slug: string }[];
-  }[];
-}
-
-/** Manufacturers with their series and models nested, sourced from Supabase. */
-export async function getManufacturers(): Promise<ManufacturerOption[]> {
+/** Flat manufacturer list — no nested series/models, so this stays cheap at any catalog size. */
+export async function getManufacturers(): Promise<ManufacturerSummary[]> {
   const { data, error } = await supabase
     .from("manufacturers")
-    .select("id, name, series ( id, name, models ( id, name, slug ) )")
-    .returns<ManufacturerRow[]>();
+    .select("id, name, slug")
+    .order("name");
 
   if (error) throw new Error(`Failed to load manufacturers: ${error.message}`);
+  return data ?? [];
+}
 
-  return (data ?? [])
-    .map((m) => ({
-      id: m.id,
-      name: m.name,
-      series: (m.series ?? [])
-        .map((s) => ({
-          id: s.id,
-          name: s.name,
-          models: [...(s.models ?? [])].sort((a, b) => a.name.localeCompare(b.name)),
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+export async function getManufacturerBySlug(slug: string): Promise<ManufacturerSummary | null> {
+  const trimmed = slug.trim();
+  if (!trimmed) return null;
+
+  const { data, error } = await supabase
+    .from("manufacturers")
+    .select("id, name, slug")
+    .eq("slug", trimmed)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load manufacturer: ${error.message}`);
+  return data ?? null;
+}
+
+/** Series for one manufacturer — only fetched once a manufacturer is selected. */
+export async function getSeriesForManufacturer(manufacturerId: string): Promise<SeriesSummary[]> {
+  if (!UUID_RE.test(manufacturerId)) return [];
+
+  const { data, error } = await supabase
+    .from("series")
+    .select("id, name, slug")
+    .eq("manufacturer_id", manufacturerId)
+    .order("name");
+
+  if (error) throw new Error(`Failed to load series: ${error.message}`);
+  return data ?? [];
+}
+
+/**
+ * Models for one series — only fetched once a series is selected. Returned
+ * flat (no per-model detail) so a 100+ model series stays a cheap, single
+ * query filtered client-side rather than something that needs pagination.
+ */
+export async function getModelsForSeries(seriesId: string): Promise<ModelSummary[]> {
+  if (!UUID_RE.test(seriesId)) return [];
+
+  const { data, error } = await supabase
+    .from("models")
+    .select("id, name, slug")
+    .eq("series_id", seriesId)
+    .order("name");
+
+  if (error) throw new Error(`Failed to load models: ${error.message}`);
+  return data ?? [];
 }
 
 export interface ModelDetail {

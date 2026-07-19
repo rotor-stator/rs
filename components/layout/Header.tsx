@@ -42,8 +42,7 @@ export default function Header() {
   }, [menuOpen]);
 
   const navLinks = [
-    { href: `/${locale}/stator`, label: t("stator") },
-    { href: `/${locale}/rotor`, label: t("rotor") },
+    { href: `/${locale}/search`, label: t("findAPart") },
     { href: `/${locale}/contact`, label: t("contact") },
   ];
 

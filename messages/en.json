@@ -17,6 +17,7 @@
     "home": "Home"
   },
   "nav": {
+    "findAPart": "Find a Part",
     "stator": "Stator",
     "rotor": "Rotor",
     "cart": "Cart",
@@ -25,29 +26,17 @@
   "home": {
     "headline": "Screw Pump Spare Parts",
     "subline": "Precision-engineered stator and rotor replacements for leading pump manufacturers.",
-    "statorCard": "Stator",
-    "statorDesc": "Elastomer stator sleeves for all major screw pump brands",
-    "rotorCard": "Rotor",
-    "rotorDesc": "Chrome-plated and alloy rotor shafts",
     "heroTitle": "OEM-Grade Replacement Rotor & Stator",
     "heroTaglineLine1": "Progressive Cavity Pump, Eccentric Screw Pump, Mono Pump...",
     "heroTaglineLine2": "Whatever you call it, we have the right replacement rotor and stator. Made in Germany.",
     "heroCta": "Find Your Part",
-    "selectorTitle": "Select Your Rotor or Stator",
-    "selectorSubtitle": "Three steps from pump brand to the exact part you need.",
-    "stepManufacturer": "Manufacturer",
-    "stepSeries": "Series",
-    "stepModel": "Model",
+    "selectorTitle": "Find Your Rotor or Stator",
+    "selectorSubtitle": "Search by part number, or browse by manufacturer.",
     "viewProduct": "View Product",
-    "changeSelection": "Change",
     "browseByManufacturer": "or browse by manufacturer",
     "viewAllResults": "View all results ({count})"
   },
   "category": {
-    "selectManufacturer": "Select Manufacturer",
-    "selectSeries": "Select Series",
-    "selectModel": "Select Model",
-    "availableProducts": "Available Products",
     "noProductsForModel": "No products listed for this model yet. Contact us for availability.",
     "notAvailable": "Not Available"
   },
@@ -108,7 +97,13 @@
     "allManufacturers": "All Manufacturers",
     "allMaterials": "All Materials",
     "noFilterResults": "No results match the selected filters.",
-    "resetFilters": "Reset filters"
+    "resetFilters": "Reset filters",
+    "browseManufacturerHeading": "Browse by Manufacturer",
+    "browseSeriesHeading": "Select a Series",
+    "modelFilterPlaceholder": "Filter models...",
+    "noModelsMatch": "No models match your filter.",
+    "noModelsInSeries": "No models listed for this series yet.",
+    "noSeriesForManufacturer": "No series listed for this manufacturer yet."
   },
   "model": {
     "breadcrumbHome": "Home",
